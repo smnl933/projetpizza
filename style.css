@@ -1,0 +1,229 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+     display: flex;  /*contribue a descendre en bas de page footer*/
+    flex-direction: column; /*contribue a descendre en bas de page footer*/
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background: #fff8f0;
+      min-height: 100vh;
+   
+}
+
+/* pour ma navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #d62828;
+    padding: 15px 20px;
+    color: white;
+}
+
+.logo {
+    font-size: 1.5rem;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+/*  pour les pizza  */
+.pizza-scroll-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /*  centre */
+    gap: 25px;
+    padding: 40px;
+}
+
+.encadre {
+    width: 250px;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center; /* centre contenu */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.encadre:hover {
+    transform: translateY(-5px);
+}
+
+/* pour les images */
+.encadre img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 10px auto;
+    border-radius: 10px;
+}
+
+/* pour mes bouton*/
+.encadre button {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    background: #f77f00;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+
+.btn {
+    width: 100%; 
+    padding: 5px; 
+    background: #e67e22;
+     color: white; 
+     border: none; 
+     border-radius: 8px; 
+     text-decoration: none;
+     font-size: 16px;
+      cursor: pointer; 
+      transition: 0.3s;
+}
+
+.encadre button:hover {
+    background: #d62828;
+}
+
+footer {
+     text-align: center;
+     padding: 15px;
+      background: #333; 
+      color: white;
+      
+}
+
+main {
+    flex: 1; /* notre footer est en bas de page*/
+}
+/* HERO ( pour accueil ✅) */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.hero img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 10px;
+}
+
+.hero-text {
+    max-width: 500px;
+}
+
+/* le responsive pour mobile et tablette */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        margin-top: 10px;
+    }
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/*partie inscription */
+.form-auth {
+    background: white;
+    width: 320px;
+    margin: 40px auto;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+/* inputs uniquement auth */
+.form-auth input,
+.form-auth select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* focus */
+.form-auth input:focus,
+.form-auth select:focus {
+    border-color: #f77f00;
+    outline: none;
+}
+
+/* bouton uniquement auth */
+.form-auth button {
+    width: 100%;
+    padding: 12px;
+    background: #f77f00;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.form-auth button:hover {
+    background: #d62828;
+}
+
+/* message */
+#message {
+    text-align: center;
+    margin-top: 10px;
+    color: #d62828;
+    font-weight: bold;
+}
+
+/* lien */
+.auth-link {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.auth-link a {
+    color: #d62828;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.auth-link a:hover {
+    text-decoration: underline;
+}
