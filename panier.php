@@ -5,34 +5,15 @@ ini_set('display_errors', 1);
 include 'db.php';
 session_start();
 
-/* 🔒 SÉCURITÉ VISITEUR */
-if(!isset($_SESSION['user_id'])){
-    if($_SERVER['REQUEST_METHOD'] === 'POST'){
-        echo "❌ Non connecté";
-        exit();
-    }
-
-    header("Location: connexion.php");
-    exit();
-}
-
-/* 🔒 BLOQUER RESTAURATEUR */
-if(isset($_SESSION['role']) && $_SESSION['role'] === 'restaurateur'){
-    if($_SERVER['REQUEST_METHOD'] === 'POST'){
-        echo "❌ Accès interdit";
-        exit();
-    }
-
-    header("Location: accueil.php");
-    exit();
-}
-
-/* 🔥 USER */
-$user_id = $_SESSION['user_id'];
+/* 🔥 LOGIN */
+$isLogged = isset($_SESSION['user_id']);
+$user_id = $_SESSION['user_id'] ?? null;
 
 /* 🔥 AJOUT */
 if(isset($_POST['add'])){
-    $pizza_id = intval($_POST['pizza_id']); // 🔒 sécurité
+    if(!$isLogged) exit("not_connected");
+
+    $pizza_id = $_POST['pizza_id'];
 
     $check = $pdo->prepare("SELECT 1 FROM panier WHERE user_id=? AND pizza_id=?");
     $check->execute([$user_id, $pizza_id]);
@@ -50,35 +31,30 @@ if(isset($_POST['add'])){
 
 /* 🔥 DELETE */
 if(isset($_POST['delete'])){
-    $pizza_id = intval($_POST['pizza_id']); // 🔒 sécurité
+    if(!$isLogged) exit("not_connected");
 
     $pdo->prepare("DELETE FROM panier WHERE user_id=? AND pizza_id=?")
-        ->execute([$user_id, $pizza_id]);
+        ->execute([$user_id, $_POST['pizza_id']]);
 
     exit("ok");
 }
 
 /* 🔥 UPDATE */
 if(isset($_POST['update'])){
-    $pizza_id = intval($_POST['pizza_id']);
-    $change = intval($_POST['change']);
+    if(!$isLogged) exit("not_connected");
 
     $pdo->prepare("UPDATE panier SET quantite = quantite + ? WHERE user_id=? AND pizza_id=?")
-        ->execute([$change, $user_id, $pizza_id]);
+        ->execute([$_POST['change'], $user_id, $_POST['pizza_id']]);
 
     $pdo->prepare("DELETE FROM panier WHERE user_id=? AND pizza_id=? AND quantite<=0")
-        ->execute([$user_id, $pizza_id]);
+        ->execute([$user_id, $_POST['pizza_id']]);
 
     exit("ok");
 }
 
-/* 🔥 VALIDER COMMANDE */
+/* 🔥 VALIDER */
 if(isset($_POST['valider'])){
-
-    if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'client'){
-        echo "❌ Non autorisé";
-        exit();
-    }
+    if(!$isLogged) exit("not_connected");
 
     $pdo->prepare("
         INSERT INTO commandes (user_id, statut) 
@@ -106,6 +82,11 @@ if(isset($_POST['valider'])){
 
 /* 🔥 LOAD PANIER */
 if(isset($_GET['load'])){
+
+    if(!$isLogged){
+        echo "<h2 style='text-align:center;'>⚠️ Connecte-toi pour voir ton panier</h2>";
+        exit;
+    }
 
     $sql = $pdo->prepare("
         SELECT pizzas.*, panier.quantite
@@ -148,3 +129,70 @@ if(isset($_GET['load'])){
     exit;
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Panier</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<?php include 'navbar.php'; ?>
+
+<div id="panier"></div>
+
+<script>
+const send = (data) =>
+    fetch('panier.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams(data)
+    })
+    .then(r => r.text())
+    .then(res => {
+        if(res === "not_connected"){
+            alert("⚠️ Connecte-toi !");
+            window.location.href = "login.php";
+            return;
+        }
+        loadCart();
+    });
+
+function loadCart(){
+    fetch('panier.php?load=1')
+    .then(r => r.text())
+    .then(html => panier.innerHTML = html);
+}
+
+function removeItem(id){
+    send({delete:1, pizza_id:id});
+}
+
+function updateQty(id, change){
+    send({update:1, pizza_id:id, change});
+}
+
+function validateCart(){
+    fetch('panier.php', {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:'valider=1'
+    })
+    .then(r=>r.text())
+    .then(res=>{
+        if(res==="not_connected"){
+            alert("⚠️ Connecte-toi !");
+            window.location.href="login.php";
+        }
+        if(res==="ok") location.href="clients.php";
+    });
+}
+
+loadCart();
+</script>
+
+</body>
+</html>

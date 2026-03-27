@@ -3,7 +3,7 @@ include 'db.php';
 session_start();
 
 /* 🔥 TRAITEMENT AJAX */
-if(isset($_POST['register'])){
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     $nom = $_POST['nom'];
     $prenom = $_POST['prenom'];
@@ -26,9 +26,9 @@ if(isset($_POST['register'])){
 
         $insert->execute([$nom, $prenom, $email, $password, $role]);
 
-        // 🔥 connexion auto CORRIGÉE
+        // 🔥 connexion auto
         $_SESSION['user_id'] = $pdo->lastInsertId();
-        $_SESSION['role'] = strtolower($role); // ✅ AJOUT ICI
+        $_SESSION['role'] = strtolower($role);
 
         echo "success";
     }
@@ -79,7 +79,7 @@ if(isset($_POST['register'])){
 <script>
 document.getElementById("registerForm").addEventListener("submit", function(e){
 
-    e.preventDefault(); // bloque reload
+    e.preventDefault();
 
     let formData = new FormData(this);
 
@@ -90,8 +90,8 @@ document.getElementById("registerForm").addEventListener("submit", function(e){
     .then(res => res.text())
     .then(data => {
 
-        if(data === "success"){
-            window.location.href = "menu.php"; // 🔥 redirection
+        if(data.trim() === "success"){
+            window.location.href = "menu.php";
         } else {
             document.getElementById("message").innerText = data;
         }
