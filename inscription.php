@@ -26,8 +26,9 @@ if(isset($_POST['register'])){
 
         $insert->execute([$nom, $prenom, $email, $password, $role]);
 
-        // 🔥 connexion auto
+        // 🔥 connexion auto CORRIGÉE
         $_SESSION['user_id'] = $pdo->lastInsertId();
+        $_SESSION['role'] = strtolower($role); // ✅ AJOUT ICI
 
         echo "success";
     }

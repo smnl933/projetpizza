@@ -15,10 +15,15 @@ if(isset($_POST['login'])){
 
         $user = $sql->fetch();
 
-        // 🔥 IMPORTANT (password_hash)
+        // 🔥 Vérification mot de passe
         if(password_verify($mdp, $user['motdepasse'])){
+
+            // ✅ SESSION CORRIGÉE
             $_SESSION['user_id'] = $user['id'];
+            $_SESSION['role'] = strtolower($user['role']); // 🔥 AJOUT IMPORTANT
+
             echo "success";
+
         } else {
             echo "Mot de passe incorrect";
         }
@@ -30,7 +35,6 @@ if(isset($_POST['login'])){
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -59,7 +63,7 @@ if(isset($_POST['login'])){
     Pas de compte ? <a href="inscription.php">S'inscrire</a>
 </p>
 
-<!-- 🔥 AJAX CORRIGÉ -->
+<!-- 🔥 AJAX -->
 <script>
 document.getElementById("loginForm").addEventListener("submit", function(e){
 
@@ -78,8 +82,6 @@ document.getElementById("loginForm").addEventListener("submit", function(e){
     })
     .then(res => res.text())
     .then(data => {
-
-        console.log(data); // 🔥 debug
 
         if(data.trim() === "success"){
             window.location.href = "menu.php";
