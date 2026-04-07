@@ -122,7 +122,7 @@ footer {
 main {
     flex: 1; /* notre footer est en bas de page*/
 }
-/* HERO ( pour accueil ✅) */
+/* HERO ( pour accueil ) */
 .hero {
     display: flex;
     align-items: center;
@@ -150,7 +150,8 @@ main {
     }
 
     .nav-links {
-        flex-direction: column;
+        
+        flex-direction: row;
         margin-top: 10px;
     }
 

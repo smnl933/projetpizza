@@ -26,7 +26,7 @@ $sql = $pdo->query("SELECT * FROM pizzas");
     <div class="encadre">
         
         <!-- IMAGE -->
-       <img src="<?= $pizza['image'] ?>">
+        <img src="<?= $pizza['image'] ?>">
 
         <!-- NOM -->
         <h3><?= $pizza['nom'] ?></h3>
@@ -37,10 +37,20 @@ $sql = $pdo->query("SELECT * FROM pizzas");
         <!-- PRIX -->
         <p><strong><?= $pizza['prix'] ?> €</strong></p>
 
-        <!-- 🔥 FORMULAIRE AJAX -->
-        <form onsubmit="addToCart(event, <?= $pizza['id'] ?>)">
-            <button type="submit">Ajouter au panier 🛒</button>
-        </form>
+        <!--  CONDITION ROLE -->
+        <?php if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'restaurateur'): ?>
+            
+            <!-- FORMULAIRE AJAX -->
+            <form onsubmit="addToCart(event, <?= $pizza['id'] ?>)">
+                <button type="submit">Ajouter au panier 🛒</button>
+            </form>
+
+        <?php else: ?>
+
+            <!-- MESSAGE RESTAURATEUR -->
+            <p>👨‍🍳 Mode restaurateur : consultation uniquement</p>
+
+        <?php endif; ?>
 
     </div>
 
@@ -48,10 +58,10 @@ $sql = $pdo->query("SELECT * FROM pizzas");
 
 </div>
 
-<!-- 🔥 SCRIPT AJAX -->
+<!-- SCRIPT AJAX -->
 <script>
 function addToCart(e, id){
-    e.preventDefault(); // empêche le rechargement
+    e.preventDefault();
 
     fetch('panier.php', {
         method: 'POST',
@@ -63,16 +73,10 @@ function addToCart(e, id){
     .then(res => res.text())
     .then(data => {
         console.log(data);
-
-        // 🔥 REDIRECTION vers panier
         window.location.href = "panier.php";
     });
 }
-
-
-
 </script>
 
 </body>
 </html>
-

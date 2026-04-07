@@ -2,25 +2,25 @@
 include 'db.php';
 session_start();
 
-/* 🔥 TRAITEMENT AJAX */
-if(isset($_POST['login'])){
+/*  TRAITEMENT AJAX */
+if(isset($_POST['login'])){ // si le bouton login existe ducoup on envoie les donnes
 
-    $email = $_POST['email'] ?? '';
-    $mdp = $_POST['motdepasse'] ?? '';
+    $email = $_POST['email'] ?? '';   // on recuperer le email envoye par le formulaire sinon rien
+    $mdp = $_POST['motdepasse'] ?? '';  // on recupere le mdp envoyer par le formulaire sinon rien 
 
-    $sql = $pdo->prepare("SELECT * FROM users WHERE email=?");
+    $sql = $pdo->prepare("SELECT * FROM users WHERE email=?"); // on selectionne tout ce qui vien de la table users  ou l'email et on va preparer une requete sql pour ensuite l'execute
     $sql->execute([$email]);
 
-    if($sql->rowCount() > 0){
+    if($sql->rowCount() > 0){ // si le resultat est superieur a  0 
 
-        $user = $sql->fetch();
+        $user = $sql->fetch(); // on recupere les donnes de l'utilisateur dans la db
 
-        // 🔥 Vérification mot de passe
+        //  Vérification mot de passe
         if(password_verify($mdp, $user['motdepasse'])){
 
-            // ✅ SESSION CORRIGÉE
+            
             $_SESSION['user_id'] = $user['id'];
-            $_SESSION['role'] = strtolower($user['role']); // 🔥 AJOUT IMPORTANT
+            $_SESSION['role'] = strtolower($user['role']); //  AJOUT IMPORTANT
 
             echo "success";
 
@@ -63,7 +63,7 @@ if(isset($_POST['login'])){
     Pas de compte ? <a href="inscription.php">S'inscrire</a>
 </p>
 
-<!-- 🔥 AJAX -->
+<!--  AJAX -->
 <script>
 document.getElementById("loginForm").addEventListener("submit", function(e){
 

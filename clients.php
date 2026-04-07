@@ -4,7 +4,7 @@ session_start();
 
 $user_id = $_SESSION['user_id'] ?? 1;
 
-/* 🔥 SUPPRIMER COMMANDE (AJAX) */
+/*  SUPPRIMER COMMANDE (AJAX) */
 if(isset($_POST['delete_cmd'])){
     $id = $_POST['id'];
 
@@ -15,7 +15,7 @@ if(isset($_POST['delete_cmd'])){
     exit;
 }
 
-/* 🔥 récupérer commandes + détails */
+/*  récupérer commandes + détails */
 $sql = $pdo->prepare("
     SELECT c.id, c.date_commande, c.statut, p.nom, p.prix, cd.quantite
     FROM commandes c
@@ -28,12 +28,12 @@ $sql->execute([$user_id]);
 
 $commandes = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-/* 🔥 regrouper */
+/*  regrouper */
 $grouped = [];
 
 foreach($commandes as $row){
     $grouped[$row['id']]['date'] = $row['date_commande'];
-    $grouped[$row['id']]['statut'] = $row['statut']; // 🔥 AJOUT
+    $grouped[$row['id']]['statut'] = $row['statut']; //  AJOUT
     $grouped[$row['id']]['items'][] = $row;
 }
 ?>
@@ -63,7 +63,7 @@ foreach($commandes as $row){
     <h3>Commande #<?= $id ?></h3>
     <p>Date : <?= $cmd['date'] ?></p>
 
-    <!-- 🔥 STATUT AJOUTÉ -->
+    <!-- STATUT AJOUTÉ -->
     <p>
     Statut : 
     <?php
@@ -82,7 +82,7 @@ foreach($commandes as $row){
 
     <strong>Total : <?= $total ?> €</strong>
 
-    <!-- 🔥 bouton supprimable seulement si pas acceptée -->
+    <!--  bouton supprimable seulement si pas acceptée -->
     <?php if($cmd['statut'] != 'acceptee'): ?>
     <button onclick="deleteCmd(<?= $id ?>)" style="
         margin-top:10px;

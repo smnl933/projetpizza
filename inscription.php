@@ -2,18 +2,18 @@
 include 'db.php';
 session_start();
 
-/* 🔥 TRAITEMENT AJAX */
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
+/*  TRAITEMENT AJAX */
+if($_SERVER['REQUEST_METHOD'] === 'POST'){ // si la methode de la requete est POST alors on traite les donnes du formulaire
 
-    $nom = $_POST['nom'];
-    $prenom = $_POST['prenom'];
-    $email = $_POST['email'];
-    $password = password_hash($_POST['motdepasse'], PASSWORD_DEFAULT);
+    $nom = $_POST['nom'];// on recupere les donnes du nom
+    $prenom = $_POST['prenom']; // on recupere le prenom
+    $email = $_POST['email']; // on recupere le email
+    $password = password_hash($_POST['motdepasse'], PASSWORD_DEFAULT); // on recupere le mot de passe et on le hash pour la securite
     $role = $_POST['role'];
 
     // Vérifier si email existe
-    $check = $pdo->prepare("SELECT * FROM users WHERE email=?");
-    $check->execute([$email]);
+    $check = $pdo->prepare("SELECT * FROM users WHERE email=?"); 
+    $check->execute([$email]); 
 
     if($check->rowCount() > 0){
         echo "❌ Email déjà utilisé";
@@ -26,7 +26,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
         $insert->execute([$nom, $prenom, $email, $password, $role]);
 
-        // 🔥 connexion auto
+        //  connexion auto
         $_SESSION['user_id'] = $pdo->lastInsertId();
         $_SESSION['role'] = strtolower($role);
 
@@ -75,7 +75,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     <a href="connexion.php">Se connecter</a>
 </p>
 
-<!-- 🔥 AJAX -->
+<!--  AJAX -->
 <script>
 document.getElementById("registerForm").addEventListener("submit", function(e){
 

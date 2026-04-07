@@ -3,7 +3,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 ?>
-
 <header>
     <nav class="navbar">
         <h1 class="logo">🍕 Eats at Siman</h1>
@@ -15,7 +14,10 @@ if (session_status() === PHP_SESSION_NONE) {
             <?php if(isset($_SESSION['user_id'])): ?>
 
                 <!-- CONNECTÉ -->
-                <li><a href="panier.php">Panier</a></li>
+
+                <?php if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'restaurateur'): ?>
+                    <li><a href="panier.php">Panier</a></li>
+                <?php endif; ?>
 
                 <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'restaurateur'): ?>
                     <li><a href="restaurateur.php">👨‍🍳 Restaurateur</a></li>

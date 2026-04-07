@@ -2,7 +2,7 @@
 include 'db.php';
 session_start();
 
-/* 🔥 CHANGER STATUT (AJAX) */
+/*  CHANGER STATUT (AJAX) */
 if(isset($_POST['action'])){
     $id = $_POST['id'];
     $action = $_POST['action'];
@@ -19,7 +19,7 @@ if(isset($_POST['action'])){
     exit;
 }
 
-/* 🔥 récupérer commandes */
+/*  récupérer commandes */
 $sql = $pdo->query("
     SELECT c.id, c.date_commande, c.statut, p.nom, p.prix, cd.quantite
     FROM commandes c
@@ -30,7 +30,7 @@ $sql = $pdo->query("
 
 $data = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-/* 🔥 regrouper */
+/*  regrouper */
 $grouped = [];
 
 foreach($data as $row){
@@ -78,7 +78,7 @@ foreach($data as $row){
         <p>🍕 <?= $item['nom'] ?> x<?= $item['quantite'] ?></p>
     <?php endforeach; ?>
 
-    <!-- 🔥 boutons seulement si en attente -->
+    <!--  boutons seulement si en attente -->
     <?php if($cmd['statut'] == 'en_attente'): ?>
         <button onclick="updateStatus(<?= $id ?>,'accept')" class="btn">Accepter ✅</button>
         <button onclick="updateStatus(<?= $id ?>,'refuse')" class="btn">Refuser ❌</button>

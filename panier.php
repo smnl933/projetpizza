@@ -5,11 +5,11 @@ ini_set('display_errors', 1);
 include 'db.php';
 session_start();
 
-/* 🔥 LOGIN */
+/*  LOGIN */
 $isLogged = isset($_SESSION['user_id']);
 $user_id = $_SESSION['user_id'] ?? null;
 
-/* 🔥 AJOUT */
+/*  AJOUT */
 if(isset($_POST['add'])){
     if(!$isLogged) exit("not_connected");
 
@@ -29,7 +29,7 @@ if(isset($_POST['add'])){
     exit("ok");
 }
 
-/* 🔥 DELETE */
+/*  DELETE */
 if(isset($_POST['delete'])){
     if(!$isLogged) exit("not_connected");
 
@@ -39,7 +39,7 @@ if(isset($_POST['delete'])){
     exit("ok");
 }
 
-/* 🔥 UPDATE */
+/*  UPDATE */
 if(isset($_POST['update'])){
     if(!$isLogged) exit("not_connected");
 
@@ -52,7 +52,7 @@ if(isset($_POST['update'])){
     exit("ok");
 }
 
-/* 🔥 VALIDER */
+/*  VALIDER */
 if(isset($_POST['valider'])){
     if(!$isLogged) exit("not_connected");
 
@@ -80,7 +80,7 @@ if(isset($_POST['valider'])){
     exit;
 }
 
-/* 🔥 LOAD PANIER */
+/*  LOAD PANIER */
 if(isset($_GET['load'])){
 
     if(!$isLogged){
@@ -155,7 +155,7 @@ const send = (data) =>
     .then(res => {
         if(res === "not_connected"){
             alert("⚠️ Connecte-toi !");
-            window.location.href = "login.php";
+            window.location.href = "connexion.php";
             return;
         }
         loadCart();
@@ -185,7 +185,7 @@ function validateCart(){
     .then(res=>{
         if(res==="not_connected"){
             alert("⚠️ Connecte-toi !");
-            window.location.href="login.php";
+            window.location.href="connexion.php";
         }
         if(res==="ok") location.href="clients.php";
     });
